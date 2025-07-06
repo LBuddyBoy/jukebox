@@ -1,6 +1,6 @@
 import { getTrackById, getTracks } from "#db/query/tracks";
 import express from "express";
-import { isValidId } from "./utils";
+import { isValidId } from "./utils.js";
 const trackRouter = express.Router();
 
 trackRouter.get("/", async (req, res) => {

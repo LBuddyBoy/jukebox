@@ -1,13 +1,12 @@
 import {
-  addTrack,
   createPlaylist,
   getPlaylistById,
   getPlaylists,
-  getPlaylistTracks,
 } from "#db/query/playlists";
 import express from "express";
-import { isValidId } from "./utils";
+import { isValidId } from "./utils.js";
 import { getTrackById } from "#db/query/tracks";
+import { createPlaylistTrack, getPlaylistTracks } from "#db/query/playlist_tracks";
 const playlistRouter = express.Router();
 
 playlistRouter.get("/", async (req, res) => {
@@ -88,10 +87,11 @@ playlistRouter.post("/:id/tracks", async (req, res) => {
   }
 
   try {
-    if (!await getTrackById(trackId)) {
-        return res.status(400).json("A track with that id does not exist.");
+    if (!(await getTrackById(trackId))) {
+      return res.status(400).json("A track with that id does not exist.");
     }
-    const track = await addTrack(id, trackId);
+
+    const track = await createPlaylistTrack(id, trackId);
 
     res.status(201).json(track);
   } catch (error) {
